@@ -1,34 +1,18 @@
-package com.klab2.challenge.prototype.domain;
-
-import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+package com.klab2.challenge.prototype.repository;
 
 
-@Entity
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Comment {
-    @Id
-    @GeneratedValue
-    @Column(name = "comment_id")
-    private Long id;
+import com.klab2.challenge.prototype.domain.Comment;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-    @Column(name = "user_id")
-    private Long user_id;
+import java.util.List;
+import java.util.Optional;
 
-    @Column(name = "pp_id")
-    private Long pp_id;
+public interface CommentRepository extends JpaRepository<Comment,Long> {
+    Optional<Comment> findByName(String Name);
 
-    @Column(name = "comment")
-    private String comment;
-
-    public void setComment(String comment){
-        this.comment = comment;
-    }
-
+    @Query("select c from Comment c where c.pp_id =:pp_id")
+    List<Comment> getAllCommentByPP_id(@Param("pp_id") Long pp_id);
 
 }
