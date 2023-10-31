@@ -6,5 +6,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class SetCommentResponse {
-    int errorCode;
+    Long commentId;
 }

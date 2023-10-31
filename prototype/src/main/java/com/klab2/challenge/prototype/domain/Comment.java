@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment {
     @Id
@@ -20,8 +19,8 @@ public class Comment {
     @Column(name = "user_id")
     private Long user_id;
 
-    @Column(name = "pp_id")
-    private Long pp_id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ProofPost proofPost;
 
     @Column(name = "comment")
     private String comment;

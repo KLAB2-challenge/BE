@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SetCommentRequest {
     String content;
-    String userId;
+    String userName;
     int proofPostId;
 }
