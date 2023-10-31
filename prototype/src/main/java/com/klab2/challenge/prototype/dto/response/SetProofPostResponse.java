@@ -1,5 +1,10 @@
 package com.klab2.challenge.prototype.dto.response;
 
-public class SetProofPostResponse {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
+@AllArgsConstructor
+public class SetProofPostResponse {
+    private long proofPostid;
 }
