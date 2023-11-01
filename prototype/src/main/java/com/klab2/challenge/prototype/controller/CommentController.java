@@ -17,9 +17,9 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @GetMapping("/getAllComments")
-    @ResponseBody
-    public ResponseEntity<GetAllCommentsResponse> getAllComments(){
-        //GetAllCommentsResponse response = commentService;
-    }
+//    @GetMapping("/getAllComments")
+//    @ResponseBody
+//    public ResponseEntity<GetAllCommentsResponse> getAllComments(){
+//        //GetAllCommentsResponse response = commentService;
+//    }
 }
