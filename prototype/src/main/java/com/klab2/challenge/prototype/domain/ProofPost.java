@@ -21,18 +21,23 @@ public class ProofPost {
     @Column(name = "contents")
     private ProofPostContents contents;
 
-    @Embedded
-    @Column(name = "infos")
-    private ProofPostInfos infos;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "challenge_id")
+    private Challenge challenge;
 
-    @OneToMany(mappedBy = "comment")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @OneToMany(mappedBy = "proofPost")
     private List<Comment> comments = new ArrayList<>();
 
-    public ProofPost(ProofPostContents contents, ProofPostInfos infos, Challenge challenge, User user) {
+    public ProofPost(ProofPostContents contents, Challenge challenge, Member member) {
         this.contents = contents;
-        this.infos = infos;
+        this.member = member;
+        this.challenge = challenge;
 
         challenge.getProofPosts().add(this);
-        user.getProofPosts().add(this);
+        member.getProofPosts().add(this);
     }
 }

@@ -11,25 +11,28 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class Member {
 
     @Id @GeneratedValue
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "member_id")
+    private Long memberId;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "challenge")
-    private List<UserChallenge> userChallenges = new ArrayList<>();
+    @OneToMany(mappedBy = "member")
+    private List<Challenge> challenges = new ArrayList<>();
 
-    @OneToMany(mappedBy = "comment")
+    @OneToMany(mappedBy = "member")
+    private List<MemberChallenge> memberChallenges = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "proofPost")
+    @OneToMany(mappedBy = "member")
     private List<ProofPost> proofPosts = new ArrayList<>();
 
-    public User(String name) {
+    public Member(String name) {
         this.name = name;
     }
 }

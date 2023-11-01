@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChallengeInfos {
-    private String userName;
     private String startDate;
     private String endDate;
     private String frequency;

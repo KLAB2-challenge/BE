@@ -2,7 +2,6 @@ package com.klab2.challenge.prototype.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,21 +15,23 @@ public class Comment {
     @Column(name = "comment_id")
     private Long commentId;
 
-    @Column(name = "proof_post_id")
-    private Long proofPostId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "proof_post_id")
+    private ProofPost proofPost;
 
-    @Column(name = "user_name")
-    private String userName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @Column(name = "comment")
     private String comment;
 
-    public Comment(User user, ProofPost proofPost, String comment) {
-        this.userName = user.getName();
-        this.proofPostId = proofPost.getProofPostId();
+    public Comment(Member member, ProofPost proofPost, String comment) {
+        this.member = member;
+        this.proofPost = proofPost;
         this.comment = comment;
 
-        user.getComments().add(this);
+        member.getComments().add(this);
         proofPost.getComments().add(this);
     }
 }

@@ -17,6 +17,10 @@ public class Challenge {
     @Column(name = "challenge_id")
     private Long challengeId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
     @Embedded
     @Column(name = "contents")
     private ChallengeContents contents;
@@ -25,13 +29,14 @@ public class Challenge {
     @Column(name = "infos")
     private ChallengeInfos infos;
 
-    @OneToMany(mappedBy = "user")
-    private List<UserChallenge> userChallenges = new ArrayList<>();
+    @OneToMany(mappedBy = "challenge")
+    private List<MemberChallenge> memberChallenges = new ArrayList<>();
 
-    @OneToMany(mappedBy = "proofPost")
+    @OneToMany(mappedBy = "challenge")
     private List<ProofPost> proofPosts = new ArrayList<>();
 
-    public Challenge(ChallengeContents contents, ChallengeInfos infos) {
+    public Challenge(Member member, ChallengeContents contents, ChallengeInfos infos) {
+        this.member = member;
         this.contents = contents;
         this.infos = infos;
     }
