@@ -39,7 +39,9 @@ public class ChallengeService {
         Member member = memberRepository.findByName(memberName).get();
 
         // challengeId를 사용해, 해당 챌린지의 모든 멤버의 개수(오너 제외)를 가져옴. 오너는 response 객체를 만들때 추가함.
-        Integer memberNum = Integer.parseInt(memberChallengeRepository.findMemberNumOfChallenge(challengeId).toString());
+        Integer memberNum = Integer.parseInt(memberChallengeRepository
+                .findMemberNumOfChallenge(challengeId)
+                .toString());
         // challengeId를 사용해, 챌린지를 가져옴. (나중에 해당 id의 챌린지가 있는지 검증해야함.)
         Challenge challenge = challengeRepository.findById(challengeId).get();
 
