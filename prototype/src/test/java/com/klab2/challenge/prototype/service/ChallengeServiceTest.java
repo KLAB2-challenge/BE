@@ -7,10 +7,7 @@ import com.klab2.challenge.prototype.domain.Member;
 import com.klab2.challenge.prototype.repository.ChallengeRepository;
 import com.klab2.challenge.prototype.repository.MemberRepository;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -29,7 +26,7 @@ class ChallengeServiceTest {
     private String memberName;
 
     @BeforeEach
-    public void beforeAll() {
+    public void beforeEach() {
         Member member = new Member("user");
         memberName = memberRepository.save(member).getName();
     }
