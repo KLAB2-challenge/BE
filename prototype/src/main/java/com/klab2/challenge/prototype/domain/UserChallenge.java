@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserChallenge {
-    @Id @GeneratedValue()
+
+    @Id @GeneratedValue
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -19,17 +20,10 @@ public class UserChallenge {
     private Challenge challenge;
 
     public UserChallenge(User user, Challenge challenge) {
-        addUser(user);
-        addChallenge(challenge);
-    }
-
-    private void addUser(User user) {
         this.user = user;
-        user.getUserChallenges().add(this);
-    }
-
-    private void addChallenge(Challenge challenge) {
         this.challenge = challenge;
+
         challenge.getUserChallenges().add(this);
+        user.getUserChallenges().add(this);
     }
 }

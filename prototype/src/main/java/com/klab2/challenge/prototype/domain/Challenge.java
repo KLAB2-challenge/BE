@@ -13,31 +13,26 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Challenge {
 
-    @Id @GeneratedValue()
+    @Id @GeneratedValue
     @Column(name = "challenge_id")
     private Long challengeId;
 
-    @Column()
-    private String title;
+    @Embedded
+    @Column(name = "contents")
+    private ChallengeContents contents;
 
-    @Column()
-    private String image;
-
-    @Column()
-    private String startDate;
-
-    @Column()
-    private String endDate;
-
-    @Column()
-    private String frequency;
-
-    @Column()
-    private Integer category;
-
-    @Column()
-    private Boolean type;
+    @Embedded
+    @Column(name = "infos")
+    private ChallengeInfos infos;
 
     @OneToMany(mappedBy = "user")
     private List<UserChallenge> userChallenges = new ArrayList<>();
+
+    @OneToMany(mappedBy = "proofPost")
+    private List<ProofPost> proofPosts = new ArrayList<>();
+
+    public Challenge(ChallengeContents contents, ChallengeInfos infos) {
+        this.contents = contents;
+        this.infos = infos;
+    }
 }

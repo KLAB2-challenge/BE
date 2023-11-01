@@ -11,23 +11,26 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment {
-    @Id
-    @GeneratedValue
+
+    @Id @GeneratedValue
     @Column(name = "comment_id")
-    private Long id;
+    private Long commentId;
 
-    @Column(name = "user_id")
-    private Long user_id;
+    @Column(name = "proof_post_id")
+    private Long proofPostId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private ProofPost proofPost;
+    @Column(name = "user_name")
+    private String userName;
 
     @Column(name = "comment")
     private String comment;
 
-    public void setComment(String comment){
+    public Comment(User user, ProofPost proofPost, String comment) {
+        this.userName = user.getName();
+        this.proofPostId = proofPost.getProofPostId();
         this.comment = comment;
+
+        user.getComments().add(this);
+        proofPost.getComments().add(this);
     }
-
-
 }

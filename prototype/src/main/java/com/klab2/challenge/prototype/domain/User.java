@@ -13,18 +13,23 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
-    @Id @GeneratedValue()
+    @Id @GeneratedValue
     @Column(name = "user_id")
     private Long userId;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy ="challenge")
+    @OneToMany(mappedBy = "challenge")
     private List<UserChallenge> userChallenges = new ArrayList<>();
+
+    @OneToMany(mappedBy = "comment")
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "proofPost")
+    private List<ProofPost> proofPosts = new ArrayList<>();
 
     public User(String name) {
         this.name = name;
     }
-
 }

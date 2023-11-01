@@ -13,25 +13,26 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProofPost {
 
-    @Id @GeneratedValue()
+    @Id @GeneratedValue
     @Column(name="proof_post_id")
     private Long proofPostId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Challenge challenge;
+    @Embedded
+    @Column(name = "contents")
+    private ProofPostContents contents;
+
+    @Embedded
+    @Column(name = "infos")
+    private ProofPostInfos infos;
 
     @OneToMany(mappedBy = "comment")
     private List<Comment> comments = new ArrayList<>();
 
-    @Column(name = "user_id", nullable = false)
-    private long userID;
+    public ProofPost(ProofPostContents contents, ProofPostInfos infos, Challenge challenge, User user) {
+        this.contents = contents;
+        this.infos = infos;
 
-    @Column(name = "title", nullable = false)
-    private String title;
-
-    @Column(name = "content", nullable = false)
-    private String content;
-
-    @Column(name = "image")
-    private String image;
+        challenge.getProofPosts().add(this);
+        user.getProofPosts().add(this);
+    }
 }
