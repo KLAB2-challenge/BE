@@ -14,8 +14,8 @@ public class ProofPostService {
     private final ProofPostRepository proofPostRepository;
     private final CommentRepository commentRepository;
 
-    @Transactional
-    public SetProofPostResponse setProofPost(String userName, Long id, ) {
-
-    }
+//    @Transactional
+//    public SetProofPostResponse setProofPost(String userName, Long id, ) {
+//
+//    }
 }
