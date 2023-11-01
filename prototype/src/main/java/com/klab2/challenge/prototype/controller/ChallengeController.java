@@ -27,7 +27,7 @@ public class ChallengeController {
     }
 
     @PostMapping("/getChallenge")
-    public ResponseEntity<GetChallengeResponse> setChallenge(@RequestBody @Valid GetChallengeRequest request) {
+    public ResponseEntity<GetChallengeResponse> getChallenge(@RequestBody @Valid GetChallengeRequest request) {
         GetChallengeResponse response = challengeService.getChallenge(request.getMemberName(), request.getChallengeId());
         return ResponseEntity.ok(response);
     }
