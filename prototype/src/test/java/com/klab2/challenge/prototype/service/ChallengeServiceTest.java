@@ -1,7 +1,9 @@
 package com.klab2.challenge.prototype.service;
 
 import com.klab2.challenge.prototype.domain.*;
+import com.klab2.challenge.prototype.dto.response.GetOfficialOrUserChallengesResponse;
 import com.klab2.challenge.prototype.dto.response.GetPopularChallengesResponse;
+import com.klab2.challenge.prototype.dto.response.GetRelatedChallengesResponse;
 import com.klab2.challenge.prototype.repository.ChallengeRepository;
 import com.klab2.challenge.prototype.repository.MemberChallengeRepository;
 import com.klab2.challenge.prototype.repository.MemberRepository;
@@ -89,30 +91,21 @@ class ChallengeServiceTest {
         memberRepository.save(member1);
         memberRepository.save(member2);
 
-        List<Challenge> challenges = new ArrayList<>();
-        for(int i = 0; i < 5; i++) {
-            ChallengeContents contents = new ChallengeContents("title"+i, "image", "content");
-            ChallengeInfos infos = new ChallengeInfos("11/1", "12/1", "1주 1회", 1, true);
-            Challenge challenge = new Challenge(member, contents, infos);
-            challenges.add(challenge);
-
-            challengeRepository.save(challenge);
-            memberChallengeRepository.save(new MemberChallenge(member, challenge));
-        }
+        List<Challenge> challenges = createChallenges(5, true, 0);
 
         // 0번째 챌린지에 인원 1 명 추가
-        memberChallengeRepository.save(new MemberChallenge(member1, challenges.get(0)));
+        joinChallenge(member1, challenges.get(0));
 
         // 1번째 챌린지에 인원 1 명 추가
-        memberChallengeRepository.save(new MemberChallenge(member1, challenges.get(1)));
+        joinChallenge(member1, challenges.get(1));
 
         // 2번째 챌린지에 인원 2 명 추가
-        memberChallengeRepository.save(new MemberChallenge(member1, challenges.get(2)));
-        memberChallengeRepository.save(new MemberChallenge(member2, challenges.get(2)));
+        joinChallenge(member1, challenges.get(2));
+        joinChallenge(member2, challenges.get(2));
 
         // 3번째 챌린지에 인원 2 명 추가
-        memberChallengeRepository.save(new MemberChallenge(member1, challenges.get(3)));
-        memberChallengeRepository.save(new MemberChallenge(member2, challenges.get(3)));
+        joinChallenge(member1, challenges.get(3));
+        joinChallenge(member2, challenges.get(3));
 
         // when
         GetPopularChallengesResponse response1 = challengeService.getPopularChallenges(member.getName(), 0, 2);
@@ -135,5 +128,77 @@ class ChallengeServiceTest {
 
         // response3의 각 챌린지가 예상 챌린지인지 확인한다.
         Assertions.assertThat(response3.getChallenges().get(0).getMemberNum()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("공식/유저 챌린지를 가져온다.")
+    public void getOfficialChallengesService() {
+        // given
+        Member member1 = new Member("member1");
+        Member member2 = new Member("member2");
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        List<Challenge> officialChallenges = createChallenges(3, true, 0);
+        List<Challenge> userChallenges = createChallenges(2, false, 0);
+
+        // when
+        GetOfficialOrUserChallengesResponse response1 =
+                challengeService.getOfficialOrUserChallenges(member.getName(), 0, 5, true);
+        GetOfficialOrUserChallengesResponse response2 =
+                challengeService.getOfficialOrUserChallenges(member.getName(), 0, 5, false);
+
+        // then
+        Assertions.assertThat(response1.getChallenges().size()).isEqualTo(3);
+        Assertions.assertThat(response1.getChallenges().get(0).getInfos().getType()).isEqualTo(true);
+        Assertions.assertThat(response1.getChallenges().get(1).getInfos().getType()).isEqualTo(true);
+        Assertions.assertThat(response1.getChallenges().get(2).getInfos().getType()).isEqualTo(true);
+
+        Assertions.assertThat(response2.getChallenges().size()).isEqualTo(2);
+        Assertions.assertThat(response2.getChallenges().get(0).getInfos().getType()).isEqualTo(false);
+        Assertions.assertThat(response2.getChallenges().get(1).getInfos().getType()).isEqualTo(false);
+    }
+
+    @Test
+    @DisplayName("관련 챌린지를 가져온다.")
+    public void getRelatedChallengesService() {
+        // given
+        Member member1 = new Member("member1");
+        Member member2 = new Member("member2");
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        List<Challenge> Challenges1 = createChallenges(3, true, 1);
+        List<Challenge> Challenges2 = createChallenges(2, false, 2);
+
+        // when
+        GetRelatedChallengesResponse response1 =
+                challengeService.getRelatedChallenges(member.getName(), 0, 5, 1);
+        GetRelatedChallengesResponse response2 =
+                challengeService.getRelatedChallenges(member.getName(), 0, 5, 2);
+
+        // then
+        Assertions.assertThat(response1.getChallenges().size()).isEqualTo(3);
+        Assertions.assertThat(response2.getChallenges().size()).isEqualTo(2);
+    }
+
+    private List<Challenge> createChallenges(int num, boolean type, int category) {
+        List<Challenge> challenges = new ArrayList<>();
+
+        for(int i = 0; i < num; i++) {
+            ChallengeContents contents = new ChallengeContents("title"+i, "image", "content");
+            ChallengeInfos infos = new ChallengeInfos("11/1", "12/1", "1주 1회", category, type);
+            Challenge challenge = new Challenge(member, contents, infos);
+            challenges.add(challenge);
+
+            challengeRepository.save(challenge);
+            memberChallengeRepository.save(new MemberChallenge(member, challenge));
+        }
+
+        return challenges;
+    }
+
+    private void joinChallenge(Member member, Challenge challenge) {
+        memberChallengeRepository.save(new MemberChallenge(member, challenge));
     }
 }
