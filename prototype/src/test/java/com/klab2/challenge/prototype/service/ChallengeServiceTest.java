@@ -100,17 +100,17 @@ class ChallengeServiceTest {
             memberChallengeRepository.save(new MemberChallenge(member, challenge));
         }
 
-        // 0번째 친구에 인원 1 명 추가
+        // 0번째 챌린지에 인원 1 명 추가
         memberChallengeRepository.save(new MemberChallenge(member1, challenges.get(0)));
 
-        // 1번째 친구에 인원 1 명 추가
+        // 1번째 챌린지에 인원 1 명 추가
         memberChallengeRepository.save(new MemberChallenge(member1, challenges.get(1)));
 
-        // 2번째 친구에 인원 2 명 추가
+        // 2번째 챌린지에 인원 2 명 추가
         memberChallengeRepository.save(new MemberChallenge(member1, challenges.get(2)));
         memberChallengeRepository.save(new MemberChallenge(member2, challenges.get(2)));
 
-        // 3번째 친구에 인원 2 명 추가
+        // 3번째 챌린지에 인원 2 명 추가
         memberChallengeRepository.save(new MemberChallenge(member1, challenges.get(3)));
         memberChallengeRepository.save(new MemberChallenge(member2, challenges.get(3)));
 
