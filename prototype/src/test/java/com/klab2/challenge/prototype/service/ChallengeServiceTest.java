@@ -1,6 +1,7 @@
 package com.klab2.challenge.prototype.service;
 
 import com.klab2.challenge.prototype.domain.*;
+import com.klab2.challenge.prototype.dto.response.GetChallengeResponse;
 import com.klab2.challenge.prototype.dto.response.GetOfficialOrUserChallengesResponse;
 import com.klab2.challenge.prototype.dto.response.GetPopularChallengesResponse;
 import com.klab2.challenge.prototype.dto.response.GetRelatedChallengesResponse;
@@ -76,10 +77,13 @@ class ChallengeServiceTest {
         memberChallengeRepository.save(new MemberChallenge(member2, challenge));
 
         // when
-        Integer memberNum = challengeService.getChallenge(member.getName(), challenge.getChallengeId()).getMemberNum();
+        GetChallengeResponse response1 = challengeService.getChallenge(member.getName(), challenge.getChallengeId());
+        GetChallengeResponse response2 = challengeService.getChallenge(member1.getName(), challenge.getChallengeId());
 
         // then
-        Assertions.assertThat(memberNum).isEqualTo(2);
+        Assertions.assertThat(response1.getMemberNum()).isEqualTo(2);
+        Assertions.assertThat(response1.isJoin()).isEqualTo(false);
+        Assertions.assertThat(response2.isJoin()).isEqualTo(true);
     }
 
     @Test

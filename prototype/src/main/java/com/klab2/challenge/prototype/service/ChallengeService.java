@@ -40,13 +40,16 @@ public class ChallengeService {
         Member member = memberRepository.findByName(memberName).get();
 
         // challengeId를 사용해, 해당 챌린지의 모든 멤버의 개수(오너 제외)를 가져옴. 오너는 response 객체를 만들때 추가함.
-        Integer memberNum = Integer.parseInt(memberChallengeRepository
+        int memberNum = Integer.parseInt(memberChallengeRepository
                 .findMemberNumOfChallenge(challengeId)
                 .toString());
         // challengeId를 사용해, 챌린지를 가져옴. (나중에 해당 id의 챌린지가 있는지 검증해야함.)
         Challenge challenge = challengeRepository.findById(challengeId).get();
 
-        return new GetChallengeResponse(challenge.getContents(), challenge.getInfos(), memberNum);
+        // 유저가 챌린지에 참가 중인지 확인
+        boolean isJoin = memberChallengeRepository.findMemberChallengeByMemberAndChallenge(member, challenge).isPresent();
+
+        return new GetChallengeResponse(challenge.getContents(), challenge.getInfos(), memberNum, isJoin);
     }
 
     @Transactional(readOnly = true)
@@ -66,7 +69,10 @@ public class ChallengeService {
                                     challenge.getInfos(),
                                     Integer.parseInt(memberChallengeRepository
                                             .findMemberNumOfChallenge(challenge.getChallengeId())
-                                            .toString())
+                                            .toString()),
+                                    memberChallengeRepository
+                                            .findMemberChallengeByMemberAndChallenge(member, challenge)
+                                            .isPresent()
                             );
                         })
                         .toList();
@@ -91,7 +97,10 @@ public class ChallengeService {
                                     challenge.getInfos(),
                                     Integer.parseInt(memberChallengeRepository
                                             .findMemberNumOfChallenge(challenge.getChallengeId())
-                                            .toString())
+                                            .toString()),
+                                    memberChallengeRepository
+                                            .findMemberChallengeByMemberAndChallenge(member, challenge)
+                                            .isPresent()
                             );
                         })
                         .toList();
@@ -116,7 +125,10 @@ public class ChallengeService {
                                     challenge.getInfos(),
                                     Integer.parseInt(memberChallengeRepository
                                             .findMemberNumOfChallenge(challenge.getChallengeId())
-                                            .toString())
+                                            .toString()),
+                                    memberChallengeRepository
+                                            .findMemberChallengeByMemberAndChallenge(member, challenge)
+                                            .isPresent()
                             );
                         })
                         .toList();

@@ -10,5 +10,6 @@ import lombok.Getter;
 public class GetChallengeResponse {
     private ChallengeContents contents;
     private ChallengeInfos infos;
-    private Integer memberNum;
+    private int memberNum;
+    private boolean isJoin;
 }
