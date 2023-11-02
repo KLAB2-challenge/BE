@@ -22,5 +22,5 @@ public class SetProofPostRequest {
     @NotNull(message = "content를 전달해주세요")
     private String content;
 
-    private String image;
+    private String image = null;
 }
