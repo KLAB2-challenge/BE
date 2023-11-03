@@ -20,14 +20,14 @@ public class ProofPostController {
 
     @PostMapping("/setProofPost")
     public ResponseEntity<SetProofPostResponse> setProofPostRequestResponseEntity(@RequestBody @Valid SetProofPostRequest request){
-        SetProofPostResponse response = proofPostService.setProofPost(request.getChallengeId(),request.getMemberName(),
-                request.getTitle(),request.getContent(),request.getImage());
+        SetProofPostResponse response = proofPostService.setProofPost(request.getChallengeId(), request.getMemberName(),
+                request.getTitle(), request.getContent(), request.getImage());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/getProofPosts")
     public ResponseEntity<GetProofPostsResponse> getProofPost(@RequestBody @Valid GetProofPostsRequest request){
-        GetProofPostsResponse response = proofPostService.getProofPosts(request.getChallengeId(),request.getNum());
+        GetProofPostsResponse response = proofPostService.getProofPosts(request.getChallengeId(), request.getNum());
         return ResponseEntity.ok(response);
     }
 

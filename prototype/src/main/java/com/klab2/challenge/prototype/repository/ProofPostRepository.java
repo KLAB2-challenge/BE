@@ -11,10 +11,9 @@ import java.util.Optional;
 
 public interface ProofPostRepository extends JpaRepository<ProofPost, Long> {
 
-
     @Query("SELECT p FROM ProofPost p " +
             "WHERE p.challenge.challengeId = :challengeId")
-    List<ProofPost> findByChallenge(@Param("challengeId") Long challengeId);
+    List<ProofPost> findByChallengeId(@Param("challengeId") Long challengeId);
 
 //
 //
