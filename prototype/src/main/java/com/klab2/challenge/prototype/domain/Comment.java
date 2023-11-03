@@ -23,13 +23,13 @@ public class Comment {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Column(name = "comment")
-    private String comment;
+    @Column(name = "content")
+    private String content;
 
-    public Comment(Member member, ProofPost proofPost, String comment) {
+    public Comment(Member member, ProofPost proofPost, String content) {
         this.member = member;
         this.proofPost = proofPost;
-        this.comment = comment;
+        this.content = content;
 
         member.getComments().add(this);
         proofPost.getComments().add(this);
