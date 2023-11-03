@@ -1,6 +1,7 @@
 package com.klab2.challenge.prototype.domain;
 
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
