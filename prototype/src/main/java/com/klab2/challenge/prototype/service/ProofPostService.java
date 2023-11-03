@@ -3,6 +3,7 @@ package com.klab2.challenge.prototype.service;
 import com.klab2.challenge.prototype.domain.Challenge;
 import com.klab2.challenge.prototype.domain.ProofPost;
 import com.klab2.challenge.prototype.domain.ProofPostContents;
+import com.klab2.challenge.prototype.dto.response.GetProofPostResponse;
 import com.klab2.challenge.prototype.dto.response.GetProofPostsResponse;
 import com.klab2.challenge.prototype.dto.response.SetProofPostResponse;
 import com.klab2.challenge.prototype.repository.ChallengeRepository;
@@ -28,7 +29,7 @@ public class ProofPostService {
     @Transactional
     public SetProofPostResponse setProofPost(long challengeId, String memberName, String title, String content, String image){
         ProofPost proofPost = new ProofPost(new ProofPostContents(title,content,image),
-                challengeRepository.findById(challengeId).get(),memberRepository.findByName(memberName).get());
+                challengeRepository.findById(challengeId).get(), memberRepository.findByName(memberName).get());
         long proofPostId = proofPostRepository.save(proofPost).getProofPostId();
         return new SetProofPostResponse(proofPostId);
     }
@@ -36,9 +37,18 @@ public class ProofPostService {
     @Transactional(readOnly=true)
     public GetProofPostsResponse getProofPosts(long challengeId, long num) {
         Challenge challenge = challengeRepository.findById(challengeId).get();
-        List<ProofPost> proofPosts = proofPostRepository.findByChallenge(challenge.getChallengeId());
-        List<ProofPost> proofPostList = proofPosts.stream().toList().subList(0,(int)num);
-        return new GetProofPostsResponse(proofPostList);
+        List<ProofPost> proofPosts = proofPostRepository.findByChallengeId(challenge.getChallengeId()).subList(0,(int)num);
+        List<GetProofPostResponse> proofPostResponses = proofPosts.stream().map(
+                proofPost -> {
+                    return new GetProofPostResponse(
+                            proofPost.getProofPostId(),
+                            proofPost.getMember().getName(),
+                            proofPost.getContents().getTitle(),
+                            proofPost.getContents().getContent(),
+                            proofPost.getContents().getImage()
+                    );
+                }
+        ).toList();
+        return new GetProofPostsResponse(proofPostResponses);
     }
-
 }
