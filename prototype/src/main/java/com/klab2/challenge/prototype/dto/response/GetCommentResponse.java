@@ -4,10 +4,9 @@ import com.klab2.challenge.prototype.domain.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.List;
-
 @Getter
 @AllArgsConstructor
-public class GetAllCommentsResponse {
-    List<GetCommentResponse> getCommentResponses;
+public class GetCommentResponse {
+    String memberName;
+    String content;
 }
