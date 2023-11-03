@@ -6,10 +6,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class GetProofPostResponse {
-    private int proofPostId;
-    private String userId;
+    private Long proofPostId;
+    private String memberName;
     private String title;
     private String content;
     private String image;
-    private int commentsNum;
 }

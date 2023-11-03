@@ -10,5 +10,5 @@ import java.util.Optional;
 @Getter
 @AllArgsConstructor
 public class GetProofPostsResponse {
-    private List<ProofPost> proofPosts;
+    private List<GetProofPostResponse> proofPosts;
 }
