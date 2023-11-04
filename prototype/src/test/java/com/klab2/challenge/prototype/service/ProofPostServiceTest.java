@@ -1,6 +1,7 @@
 package com.klab2.challenge.prototype.service;
 
 import com.klab2.challenge.prototype.domain.*;
+import com.klab2.challenge.prototype.dto.response.GetProofPostResponse;
 import com.klab2.challenge.prototype.repository.ChallengeRepository;
 import com.klab2.challenge.prototype.repository.MemberRepository;
 import com.klab2.challenge.prototype.repository.ProofPostRepository;
@@ -72,12 +73,10 @@ public class ProofPostServiceTest {
         long proofPostId1 = proofPostRepository.save(proofPost1).getProofPostId();
         long proofPostId2 = proofPostRepository.save(proofPost2).getProofPostId();
         //when
-        List<ProofPost> proofPosts = proofPostService.getProofPosts(challengeId,2).getProofPosts();
+        List<GetProofPostResponse> responses = proofPostService.getProofPosts(challengeId,2).getProofPosts();
         //then
-        System.out.println(proofPosts.size());
-        //Assertions.assertThat().hasSize(2);
-        Assertions.assertThat(proofPosts.get(0).getProofPostId()).isEqualTo(proofPostId1);
-        Assertions.assertThat(proofPosts.get(1).getProofPostId()).isEqualTo(proofPostId2);
-
+        Assertions.assertThat(responses).hasSize(2);
+        Assertions.assertThat(responses.get(0).getProofPostId()).isEqualTo(proofPostId1);
+        Assertions.assertThat(responses.get(1).getProofPostId()).isEqualTo(proofPostId2);
     }
 }
