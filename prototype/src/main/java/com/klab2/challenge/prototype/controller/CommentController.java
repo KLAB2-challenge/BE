@@ -20,7 +20,7 @@ public class CommentController {
 
     @PostMapping("/setComment")
     public ResponseEntity<SetCommentResponse> setComment(@RequestBody @Valid SetCommentRequest request){
-        SetCommentResponse response = commentService.setComment(request.getMemberName(), request.getMemberName(), request.getProofPostId());
+        SetCommentResponse response = commentService.setComment(request.getMemberName(), request.getContent(), request.getProofPostId());
         return ResponseEntity.ok(response);
     }
 

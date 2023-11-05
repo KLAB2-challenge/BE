@@ -1,5 +1,6 @@
 package com.klab2.challenge.prototype.dto.request;
 
+import com.klab2.challenge.prototype.domain.ProofPostContents;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,11 +17,6 @@ public class SetProofPostRequest {
     @NotNull(message = "memberName을 전달해주세요")
     private String memberName;
 
-    @NotNull(message = "title을 전달해주세요")
-    private String title;
-
-    @NotNull(message = "content를 전달해주세요")
-    private String content;
-
-    private String image = null;
+    @NotNull(message = "contents를 전달해주세요")
+    private ProofPostContents contents;
 }

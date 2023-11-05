@@ -21,11 +21,11 @@ public class ProofPostController {
     @PostMapping("/setProofPost")
     public ResponseEntity<SetProofPostResponse> setProofPostRequestResponseEntity(@RequestBody @Valid SetProofPostRequest request){
         SetProofPostResponse response = proofPostService.setProofPost(request.getChallengeId(), request.getMemberName(),
-                request.getTitle(), request.getContent(), request.getImage());
+                request.getContents());
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/getProofPosts")
+    @PostMapping("/getProofPosts")
     public ResponseEntity<GetProofPostsResponse> getProofPost(@RequestBody @Valid GetProofPostsRequest request){
         GetProofPostsResponse response = proofPostService.getProofPosts(request.getChallengeId(), request.getNum());
         return ResponseEntity.ok(response);

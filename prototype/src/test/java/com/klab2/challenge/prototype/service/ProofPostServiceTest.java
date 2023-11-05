@@ -53,10 +53,14 @@ public class ProofPostServiceTest {
     @DisplayName("챌린지에 인증글을 등록하기")
     public void setProofPostTest() {
         //given
+        ProofPostContents contents1 = new ProofPostContents("pp-title1","pp-content1","pp-image1");
+        ProofPostContents contents2 = new ProofPostContents("pp-title2","pp-content2","pp-image2");
+
 
         //when
-        long proofPostId1 = proofPostService.setProofPost(challengeId,memberName,"pp-title","pp-content","pp-image").getProofPostid();
-        long proofPostId2 = proofPostService.setProofPost(challengeId,memberName,"pp-title2","pp-content2","pp-image2").getProofPostid();
+        long proofPostId1 = proofPostService.setProofPost(challengeId, memberName, contents1).getProofPostid();
+        long proofPostId2 = proofPostService.setProofPost(challengeId, memberName, contents2).getProofPostid();
+
         //then
         List<ProofPost> found = proofPostRepository.findAll();
         Assertions.assertThat(found).hasSize(2);
@@ -72,8 +76,10 @@ public class ProofPostServiceTest {
         ProofPost proofPost2 = new ProofPost(proofPostContents, challenge, member);
         long proofPostId1 = proofPostRepository.save(proofPost1).getProofPostId();
         long proofPostId2 = proofPostRepository.save(proofPost2).getProofPostId();
+
         //when
         List<GetProofPostResponse> responses = proofPostService.getProofPosts(challengeId,2).getProofPosts();
+
         //then
         Assertions.assertThat(responses).hasSize(2);
         Assertions.assertThat(responses.get(0).getProofPostId()).isEqualTo(proofPostId1);

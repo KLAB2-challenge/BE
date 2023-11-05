@@ -1,6 +1,7 @@
 package com.klab2.challenge.prototype.service;
 
 import com.klab2.challenge.prototype.domain.Challenge;
+import com.klab2.challenge.prototype.domain.Member;
 import com.klab2.challenge.prototype.domain.ProofPost;
 import com.klab2.challenge.prototype.domain.ProofPostContents;
 import com.klab2.challenge.prototype.dto.response.GetProofPostResponse;
@@ -27,9 +28,11 @@ public class ProofPostService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public SetProofPostResponse setProofPost(long challengeId, String memberName, String title, String content, String image){
-        ProofPost proofPost = new ProofPost(new ProofPostContents(title,content,image),
-                challengeRepository.findById(challengeId).get(), memberRepository.findByName(memberName).get());
+    public SetProofPostResponse setProofPost(long challengeId, String memberName, ProofPostContents contents){
+        Member member = memberRepository.findByName(memberName).get();
+        Challenge challenge = challengeRepository.findById(challengeId).get();
+        ProofPost proofPost = new ProofPost(contents, challenge, member);
+
         long proofPostId = proofPostRepository.save(proofPost).getProofPostId();
         return new SetProofPostResponse(proofPostId);
     }
