@@ -1,6 +1,21 @@
 package com.klab2.challenge.prototype.service;
 
-import com.klab2.challenge.prototype.domain.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import com.klab2.challenge.prototype.domain.Challenge;
+import com.klab2.challenge.prototype.domain.ChallengeContents;
+import com.klab2.challenge.prototype.domain.ChallengeInfos;
+import com.klab2.challenge.prototype.domain.Member;
+import com.klab2.challenge.prototype.domain.MemberChallenge;
 import com.klab2.challenge.prototype.dto.response.GetChallengeResponse;
 import com.klab2.challenge.prototype.dto.response.GetOfficialOrUserChallengesResponse;
 import com.klab2.challenge.prototype.dto.response.GetPopularChallengesResponse;
@@ -8,13 +23,6 @@ import com.klab2.challenge.prototype.dto.response.GetRelatedChallengesResponse;
 import com.klab2.challenge.prototype.repository.ChallengeRepository;
 import com.klab2.challenge.prototype.repository.MemberChallengeRepository;
 import com.klab2.challenge.prototype.repository.MemberRepository;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootTest
 class ChallengeServiceTest {
@@ -71,7 +79,7 @@ class ChallengeServiceTest {
         ChallengeContents contents = new ChallengeContents("title", "image", "content");
         ChallengeInfos infos = new ChallengeInfos("11/1", "12/1", "1주 1회", 1, true);
         Challenge challenge = new Challenge(member1, contents, infos);
-        challengeRepository.save(challenge);
+        Long challengeId = challengeRepository.save(challenge).getChallengeId();
 
         memberChallengeRepository.save(new MemberChallenge(member1, challenge));
         memberChallengeRepository.save(new MemberChallenge(member2, challenge));
@@ -81,6 +89,7 @@ class ChallengeServiceTest {
         GetChallengeResponse response2 = challengeService.getChallenge(member1.getName(), challenge.getChallengeId());
 
         // then
+        Assertions.assertThat(response1.getChallengeId()).isEqualTo(challengeId);
         Assertions.assertThat(response1.getMemberNum()).isEqualTo(2);
         Assertions.assertThat(response1.isJoin()).isEqualTo(false);
         Assertions.assertThat(response2.isJoin()).isEqualTo(true);
