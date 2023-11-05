@@ -49,7 +49,7 @@ public class ChallengeService {
         // 유저가 챌린지에 참가 중인지 확인
         boolean isJoin = memberChallengeRepository.findMemberChallengeByMemberAndChallenge(member, challenge).isPresent();
 
-        return new GetChallengeResponse(challenge.getContents(), challenge.getInfos(), memberNum, isJoin);
+        return new GetChallengeResponse(challenge.getChallengeId(), challenge.getContents(), challenge.getInfos(), memberNum, isJoin);
     }
 
     @Transactional(readOnly = true)
@@ -65,6 +65,7 @@ public class ChallengeService {
                         .stream()
                         .map( challenge -> {
                             return new GetChallengeResponse(
+                                challenge.getChallengeId(),
                                 challenge.getContents(),
                                     challenge.getInfos(),
                                     Integer.parseInt(memberChallengeRepository
@@ -93,6 +94,7 @@ public class ChallengeService {
                         .stream()
                         .map( challenge -> {
                             return new GetChallengeResponse(
+                                    challenge.getChallengeId(),
                                     challenge.getContents(),
                                     challenge.getInfos(),
                                     Integer.parseInt(memberChallengeRepository
@@ -121,6 +123,7 @@ public class ChallengeService {
                         .stream()
                         .map( challenge -> {
                             return new GetChallengeResponse(
+                                    challenge.getChallengeId(),
                                     challenge.getContents(),
                                     challenge.getInfos(),
                                     Integer.parseInt(memberChallengeRepository

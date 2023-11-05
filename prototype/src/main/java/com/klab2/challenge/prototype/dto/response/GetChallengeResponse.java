@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class GetChallengeResponse {
+    private Long challengeId;
     private ChallengeContents contents;
     private ChallengeInfos infos;
     private int memberNum;
