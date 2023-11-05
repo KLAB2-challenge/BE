@@ -1,8 +1,6 @@
 package com.klab2.challenge.prototype.service;
 
-import com.klab2.challenge.prototype.domain.Comment;
-import com.klab2.challenge.prototype.domain.Member;
-import com.klab2.challenge.prototype.domain.ProofPost;
+import com.klab2.challenge.prototype.domain.*;
 import com.klab2.challenge.prototype.dto.response.GetAllCommentsResponse;
 import com.klab2.challenge.prototype.dto.response.GetCommentResponse;
 import com.klab2.challenge.prototype.dto.response.SetCommentResponse;
@@ -13,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -28,7 +28,12 @@ public class CommentService {
         Member member = memberRepository.findByName(memberName).get();
         ProofPost proofPost = proofPostRepository.findById(proofPostId).get();
 
-        Long commentId = commentRepository.save(new Comment(member, proofPost, content)).getCommentId();
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
+        String formattedDate = simpleDateFormat.format(date);
+        CommentInfos infos = new CommentInfos(formattedDate);
+
+        Long commentId = commentRepository.save(new Comment(member, proofPost, content, infos)).getCommentId();
 
         return new SetCommentResponse(commentId);
     }
@@ -41,7 +46,8 @@ public class CommentService {
                 .map(comment -> {
                     return new GetCommentResponse(
                             comment.getMember().getName(),
-                            comment.getContent()
+                            comment.getContent(),
+                            comment.getInfos()
                     );
                 })
                 .toList();

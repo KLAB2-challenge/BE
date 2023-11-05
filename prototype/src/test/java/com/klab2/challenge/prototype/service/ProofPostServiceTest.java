@@ -10,6 +10,8 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -28,23 +30,32 @@ public class ProofPostServiceTest {
     private String memberName;
     private Long challengeId;
     private ChallengeContents contents;
-    private ChallengeInfos infos;
+    private ChallengeInfos challengeInfos;
+    private static ProofPostInfos proofPostInfos;
     Member member;
     Challenge challenge;
 
+    @BeforeAll
+    static void beforeAll() {
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
+        String formattedDate = simpleDateFormat.format(date);
+
+        proofPostInfos = new ProofPostInfos(formattedDate);
+    }
 
     @BeforeEach
-    public void beforeEach(){
+    public void beforeEach() {
          contents = new ChallengeContents("title", "image", "content");
-         infos = new ChallengeInfos("11/1", "12/1", "1주 1회", 1, true);
+         challengeInfos = new ChallengeInfos("11/1", "12/1", "1주 1회", 1, true);
          member = new Member("name");
          memberName = memberRepository.save(member).getName();
-         challenge = new Challenge(member, contents, infos);
+         challenge = new Challenge(member, contents, challengeInfos);
          challengeId = challengeRepository.save(challenge).getChallengeId();
     }
 
     @AfterEach
-    public void afterEach(){
+    public void afterEach() {
         proofPostRepository.deleteAll();
         challengeRepository.deleteAll();
     }
@@ -72,9 +83,9 @@ public class ProofPostServiceTest {
     public void getProofPostsTest(){
         //given
         ProofPostContents proofPostContents = new ProofPostContents("test제목","인증글내용","이미지");
-        ProofPost proofPost1 = new ProofPost(proofPostContents, challenge, member);
-        ProofPost proofPost2 = new ProofPost(proofPostContents, challenge, member);
-        ProofPost proofPost3 = new ProofPost(proofPostContents, challenge, member);
+        ProofPost proofPost1 = new ProofPost(challenge, member, proofPostContents, proofPostInfos);
+        ProofPost proofPost2 = new ProofPost(challenge, member, proofPostContents, proofPostInfos);
+        ProofPost proofPost3 = new ProofPost(challenge, member, proofPostContents, proofPostInfos);
         proofPostRepository.save(proofPost1);
         proofPostRepository.save(proofPost2);
         proofPostRepository.save(proofPost3);
@@ -91,9 +102,9 @@ public class ProofPostServiceTest {
     public void getAllProofPostsTest(){
         //given
         ProofPostContents proofPostContents = new ProofPostContents("test제목","인증글내용","이미지");
-        ProofPost proofPost1 = new ProofPost(proofPostContents, challenge, member);
-        ProofPost proofPost2 = new ProofPost(proofPostContents, challenge, member);
-        ProofPost proofPost3 = new ProofPost(proofPostContents, challenge, member);
+        ProofPost proofPost1 = new ProofPost(challenge, member, proofPostContents, proofPostInfos);
+        ProofPost proofPost2 = new ProofPost(challenge, member, proofPostContents, proofPostInfos);
+        ProofPost proofPost3 = new ProofPost(challenge, member, proofPostContents, proofPostInfos);
         proofPostRepository.save(proofPost1);
         proofPostRepository.save(proofPost2);
         proofPostRepository.save(proofPost3);
@@ -110,7 +121,7 @@ public class ProofPostServiceTest {
     public void getProofPostTest(){
         //given
         ProofPostContents proofPostContents = new ProofPostContents("test제목","인증글내용","이미지");
-        ProofPost proofPost1 = new ProofPost(proofPostContents, challenge, member);
+        ProofPost proofPost1 = new ProofPost(challenge, member, proofPostContents, proofPostInfos);
         Long proofPostId = proofPostRepository.save(proofPost1).getProofPostId();
 
         //when

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -22,6 +23,10 @@ public class ProofPost {
     @Column(name = "contents")
     private ProofPostContents contents;
 
+    @Embedded
+    @Column(name = "infos")
+    private ProofPostInfos infos;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "challenge_id")
     private Challenge challenge;
@@ -33,10 +38,11 @@ public class ProofPost {
     @OneToMany(mappedBy = "proofPost")
     private List<Comment> comments = new ArrayList<>();
 
-    public ProofPost(ProofPostContents contents, Challenge challenge, Member member) {
-        this.contents = contents;
+    public ProofPost(Challenge challenge, Member member, ProofPostContents contents, ProofPostInfos infos) {
         this.member = member;
         this.challenge = challenge;
+        this.contents = contents;
+        this.infos = infos;
 
         challenge.getProofPosts().add(this);
         member.getProofPosts().add(this);

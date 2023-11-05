@@ -15,6 +15,10 @@ public class Comment {
     @Column(name = "comment_id")
     private Long commentId;
 
+    @Embedded
+    @Column(name = "infos")
+    private CommentInfos infos;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "proof_post_id")
     private ProofPost proofPost;
@@ -26,10 +30,11 @@ public class Comment {
     @Column(name = "content")
     private String content;
 
-    public Comment(Member member, ProofPost proofPost, String content) {
+    public Comment(Member member, ProofPost proofPost, String content, CommentInfos infos) {
         this.member = member;
         this.proofPost = proofPost;
         this.content = content;
+        this.infos = infos;
 
         member.getComments().add(this);
         proofPost.getComments().add(this);

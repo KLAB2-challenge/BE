@@ -25,7 +25,9 @@ public class MemberChallengeService {
 
         Member member = memberRepository.findByName(memberName).get();
         Challenge challenge = challengeRepository.findById(challengeId).get();
-        memberChallengeRepository.save(new MemberChallenge(member, challenge));
+
+        if(memberChallengeRepository.findMemberChallengeByMemberAndChallenge(member, challenge).isEmpty())
+            memberChallengeRepository.save(new MemberChallenge(member, challenge));
 
         return new JoinChallengeResponse(challenge.getChallengeId());
     }

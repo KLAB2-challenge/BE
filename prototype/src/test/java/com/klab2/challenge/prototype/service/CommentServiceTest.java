@@ -7,13 +7,12 @@ import com.klab2.challenge.prototype.repository.CommentRepository;
 import com.klab2.challenge.prototype.repository.MemberRepository;
 import com.klab2.challenge.prototype.repository.ProofPostRepository;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @SpringBootTest
@@ -30,10 +29,23 @@ public class CommentServiceTest {
     @Autowired
     private CommentRepository commentRepository;
 
-    Member member;;
-    Challenge challenge;
-    ProofPost proofPost;
-    Long proofPostId;
+    private Member member;;
+    private Challenge challenge;
+    private ProofPost proofPost;
+    private Long proofPostId;
+    private static ProofPostInfos proofPostInfos;
+    private static CommentInfos commentInfos;
+
+
+    @BeforeAll
+    static void beforeAll() {
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
+        String formattedDate = simpleDateFormat.format(date);
+
+        proofPostInfos = new ProofPostInfos(formattedDate);
+        commentInfos = new CommentInfos(formattedDate);
+    }
 
     @BeforeEach
     public void beforeEach() {
@@ -43,7 +55,7 @@ public class CommentServiceTest {
 
         member = new Member("member");;
         challenge = new Challenge(member, challengeContents, infos);
-        proofPost = new ProofPost(proofPostContents, challenge, member);
+        proofPost = new ProofPost(challenge, member, proofPostContents, proofPostInfos);
 
         memberRepository.save(member);
         challengeRepository.save(challenge);
@@ -72,8 +84,10 @@ public class CommentServiceTest {
     @DisplayName("Comment를 모두 가져온다.")
     public void getAllCommentsService() {
         // given
-        Comment comment1 = new Comment(member, proofPost, "content");
-        Comment comment2 = new Comment(member, proofPost, "content");
+        Date date = new Date();
+
+        Comment comment1 = new Comment(member, proofPost, "content", commentInfos);
+        Comment comment2 = new Comment(member, proofPost, "content", commentInfos);
         commentRepository.save(comment1);
         commentRepository.save(comment2);
 

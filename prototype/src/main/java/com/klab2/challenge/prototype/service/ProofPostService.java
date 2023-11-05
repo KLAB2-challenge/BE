@@ -1,9 +1,6 @@
 package com.klab2.challenge.prototype.service;
 
-import com.klab2.challenge.prototype.domain.Challenge;
-import com.klab2.challenge.prototype.domain.Member;
-import com.klab2.challenge.prototype.domain.ProofPost;
-import com.klab2.challenge.prototype.domain.ProofPostContents;
+import com.klab2.challenge.prototype.domain.*;
 import com.klab2.challenge.prototype.dto.response.GetProofPostResponse;
 import com.klab2.challenge.prototype.dto.response.GetProofPostsResponse;
 import com.klab2.challenge.prototype.dto.response.SetProofPostResponse;
@@ -16,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,12 +25,19 @@ public class ProofPostService {
     private final ProofPostRepository proofPostRepository;
     private final ChallengeRepository challengeRepository;
     private final MemberRepository memberRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public SetProofPostResponse setProofPost(Long challengeId, String memberName, ProofPostContents contents){
         Member member = memberRepository.findByName(memberName).get();
         Challenge challenge = challengeRepository.findById(challengeId).get();
-        ProofPost proofPost = new ProofPost(contents, challenge, member);
+
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
+        String formattedDate = simpleDateFormat.format(date);
+        ProofPostInfos infos = new ProofPostInfos(formattedDate);
+
+        ProofPost proofPost = new ProofPost(challenge, member, contents, infos);
 
         long proofPostId = proofPostRepository.save(proofPost).getProofPostId();
         return new SetProofPostResponse(proofPostId);
@@ -40,8 +46,14 @@ public class ProofPostService {
     @Transactional(readOnly=true)
     public GetProofPostResponse getProofPost(Long proofPostId) {
         ProofPost proofPost = proofPostRepository.findProofPostByProofPostId(proofPostId).get();
+        int commentNum = commentRepository.findCommentsNumByProofPost(proofPostId);
 
-        return new GetProofPostResponse(proofPost.getProofPostId(), proofPost.getMember().getName(), proofPost.getContents());
+        return new GetProofPostResponse(
+                proofPost.getProofPostId(),
+                proofPost.getMember().getName(),
+                proofPost.getContents(),
+                proofPost.getInfos(),
+                commentNum);
     }
 
     @Transactional(readOnly=true)
@@ -54,6 +66,7 @@ public class ProofPostService {
                 proofPostRepository.findSomeProofPostsByChallengeId(challenge.getChallengeId(), pageRequest)
                         .stream()
                         .map(proofPost -> {
+                            int commentNum = commentRepository.findCommentsNumByProofPost(proofPost.getProofPostId());
 
                             return new GetProofPostResponse(
                                     proofPost.getProofPostId(),
@@ -62,7 +75,9 @@ public class ProofPostService {
                                             proofPost.getContents().getTitle(),
                                             proofPost.getContents().getContent(),
                                             proofPost.getContents().getImage()
-                                    )
+                                    ),
+                                    proofPost.getInfos(),
+                                    commentNum
                             );
                         }).toList();
 
@@ -77,6 +92,8 @@ public class ProofPostService {
                 proofPostRepository.findAllProofPostsByChallengeId(challengeId)
                         .stream()
                         .map(proofPost -> {
+                            int commentNum = commentRepository.findCommentsNumByProofPost(proofPost.getProofPostId());
+
                             return new GetProofPostResponse(
                                     proofPost.getProofPostId(),
                                     proofPost.getMember().getName(),
@@ -84,10 +101,11 @@ public class ProofPostService {
                                             proofPost.getContents().getTitle(),
                                             proofPost.getContents().getContent(),
                                             proofPost.getContents().getImage()
-                                    )
+                                    ),
+                                    proofPost.getInfos(),
+                                    commentNum
                             );
-                        })
-                        .toList();
+                        }).toList();
 
         return new GetProofPostsResponse(getProofPostResponses);
     }
