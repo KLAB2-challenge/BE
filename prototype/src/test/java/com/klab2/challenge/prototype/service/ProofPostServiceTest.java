@@ -50,7 +50,7 @@ public class ProofPostServiceTest {
     }
 
     @Test
-    @DisplayName("챌린지에 인증글을 등록하기")
+    @DisplayName("챌린지에 인증글 등록하기")
     public void setProofPostTest() {
         //given
         ProofPostContents contents1 = new ProofPostContents("pp-title1","pp-content1","pp-image1");
@@ -68,21 +68,55 @@ public class ProofPostServiceTest {
     }
 
     @Test
-    @DisplayName("챌린지에 인증글을 가져오기")
-    public void getProofPostTest(){
+    @DisplayName("챌린지에 인증글 가져오기")
+    public void getProofPostsTest(){
         //given
         ProofPostContents proofPostContents = new ProofPostContents("test제목","인증글내용","이미지");
         ProofPost proofPost1 = new ProofPost(proofPostContents, challenge, member);
         ProofPost proofPost2 = new ProofPost(proofPostContents, challenge, member);
-        long proofPostId1 = proofPostRepository.save(proofPost1).getProofPostId();
-        long proofPostId2 = proofPostRepository.save(proofPost2).getProofPostId();
+        ProofPost proofPost3 = new ProofPost(proofPostContents, challenge, member);
+        proofPostRepository.save(proofPost1);
+        proofPostRepository.save(proofPost2);
+        proofPostRepository.save(proofPost3);
 
         //when
-        List<GetProofPostResponse> responses = proofPostService.getProofPosts(challengeId,2).getProofPosts();
+        List<GetProofPostResponse> responses = proofPostService.getProofPosts(challengeId,0, 2).getProofPosts();
 
         //then
         Assertions.assertThat(responses).hasSize(2);
-        Assertions.assertThat(responses.get(0).getProofPostId()).isEqualTo(proofPostId1);
-        Assertions.assertThat(responses.get(1).getProofPostId()).isEqualTo(proofPostId2);
+    }
+
+    @Test
+    @DisplayName("챌린지에 모든 인증글 가져오기")
+    public void getAllProofPostsTest(){
+        //given
+        ProofPostContents proofPostContents = new ProofPostContents("test제목","인증글내용","이미지");
+        ProofPost proofPost1 = new ProofPost(proofPostContents, challenge, member);
+        ProofPost proofPost2 = new ProofPost(proofPostContents, challenge, member);
+        ProofPost proofPost3 = new ProofPost(proofPostContents, challenge, member);
+        proofPostRepository.save(proofPost1);
+        proofPostRepository.save(proofPost2);
+        proofPostRepository.save(proofPost3);
+
+        //when
+        List<GetProofPostResponse> responses = proofPostService.getAllProofPosts(challengeId).getProofPosts();
+
+        //then
+        Assertions.assertThat(responses).hasSize(3);
+    }
+
+    @Test
+    @DisplayName("특정 인증글 가져오기")
+    public void getProofPostTest(){
+        //given
+        ProofPostContents proofPostContents = new ProofPostContents("test제목","인증글내용","이미지");
+        ProofPost proofPost1 = new ProofPost(proofPostContents, challenge, member);
+        Long proofPostId = proofPostRepository.save(proofPost1).getProofPostId();
+
+        //when
+        Long id = proofPostService.getProofPost(proofPostId).getProofPostId();
+
+        //then
+        Assertions.assertThat(id).isEqualTo(proofPostId);
     }
 }

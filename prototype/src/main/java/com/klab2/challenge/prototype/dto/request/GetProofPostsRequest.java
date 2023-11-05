@@ -11,8 +11,11 @@ import lombok.NoArgsConstructor;
 public class GetProofPostsRequest {
 
     @NotNull(message = "challengeId를 전달해주세요.")
-    private long challengeId;
+    private Long challengeId;
 
-    @NotNull(message = "num을 전달해주세요.")
-    private long num;
+    @NotNull(message = "page를 전달해주세요.")
+    private int page;
+
+    @NotNull(message = "size를 전달해주세요.")
+    private int size;
 }

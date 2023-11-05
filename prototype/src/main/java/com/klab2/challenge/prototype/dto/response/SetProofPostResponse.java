@@ -6,5 +6,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class SetProofPostResponse {
-    private long proofPostid;
+    private Long proofPostid;
 }

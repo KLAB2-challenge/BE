@@ -1,5 +1,6 @@
 package com.klab2.challenge.prototype.dto.response;
 
+import com.klab2.challenge.prototype.domain.ProofPostContents;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -8,7 +9,5 @@ import lombok.Getter;
 public class GetProofPostResponse {
     private Long proofPostId;
     private String memberName;
-    private String title;
-    private String content;
-    private String image;
+    private ProofPostContents contents;
 }

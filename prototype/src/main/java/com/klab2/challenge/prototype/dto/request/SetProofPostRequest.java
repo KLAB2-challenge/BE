@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class SetProofPostRequest {
 
     @NotNull(message = "challengeId를 전달해주세요.")
-    private int challengeId;
+    private Long challengeId;
 
     @NotNull(message = "memberName을 전달해주세요")
     private String memberName;

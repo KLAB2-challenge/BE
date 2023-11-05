@@ -11,6 +11,7 @@ import com.klab2.challenge.prototype.repository.ChallengeRepository;
 import com.klab2.challenge.prototype.repository.CommentRepository;
 import com.klab2.challenge.prototype.repository.MemberRepository;
 import com.klab2.challenge.prototype.repository.ProofPostRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,12 +24,11 @@ import java.util.Optional;
 public class ProofPostService {
 
     private final ProofPostRepository proofPostRepository;
-    private final CommentRepository commentRepository;
     private final ChallengeRepository challengeRepository;
     private final MemberRepository memberRepository;
 
     @Transactional
-    public SetProofPostResponse setProofPost(long challengeId, String memberName, ProofPostContents contents){
+    public SetProofPostResponse setProofPost(Long challengeId, String memberName, ProofPostContents contents){
         Member member = memberRepository.findByName(memberName).get();
         Challenge challenge = challengeRepository.findById(challengeId).get();
         ProofPost proofPost = new ProofPost(contents, challenge, member);
@@ -38,20 +38,57 @@ public class ProofPostService {
     }
 
     @Transactional(readOnly=true)
-    public GetProofPostsResponse getProofPosts(long challengeId, long num) {
+    public GetProofPostResponse getProofPost(Long proofPostId) {
+        ProofPost proofPost = proofPostRepository.findProofPostByProofPostId(proofPostId).get();
+
+        return new GetProofPostResponse(proofPost.getProofPostId(), proofPost.getMember().getName(), proofPost.getContents());
+    }
+
+    @Transactional(readOnly=true)
+    public GetProofPostsResponse getProofPosts(long challengeId, int page, int size) {
         Challenge challenge = challengeRepository.findById(challengeId).get();
-        List<ProofPost> proofPosts = proofPostRepository.findByChallengeId(challenge.getChallengeId()).subList(0,(int)num);
-        List<GetProofPostResponse> proofPostResponses = proofPosts.stream().map(
-                proofPost -> {
-                    return new GetProofPostResponse(
-                            proofPost.getProofPostId(),
-                            proofPost.getMember().getName(),
-                            proofPost.getContents().getTitle(),
-                            proofPost.getContents().getContent(),
-                            proofPost.getContents().getImage()
-                    );
-                }
-        ).toList();
-        return new GetProofPostsResponse(proofPostResponses);
+
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        List<GetProofPostResponse> getProofPostResponses =
+                proofPostRepository.findSomeProofPostsByChallengeId(challenge.getChallengeId(), pageRequest)
+                        .stream()
+                        .map(proofPost -> {
+
+                            return new GetProofPostResponse(
+                                    proofPost.getProofPostId(),
+                                    proofPost.getMember().getName(),
+                                    new ProofPostContents(
+                                            proofPost.getContents().getTitle(),
+                                            proofPost.getContents().getContent(),
+                                            proofPost.getContents().getImage()
+                                    )
+                            );
+                        }).toList();
+
+        return new GetProofPostsResponse(getProofPostResponses);
+    }
+
+    @Transactional(readOnly=true)
+    public GetProofPostsResponse getAllProofPosts(long challengeId) {
+        Challenge challenge = challengeRepository.findById(challengeId).get();
+
+        List<GetProofPostResponse> getProofPostResponses =
+                proofPostRepository.findAllProofPostsByChallengeId(challengeId)
+                        .stream()
+                        .map(proofPost -> {
+                            return new GetProofPostResponse(
+                                    proofPost.getProofPostId(),
+                                    proofPost.getMember().getName(),
+                                    new ProofPostContents(
+                                            proofPost.getContents().getTitle(),
+                                            proofPost.getContents().getContent(),
+                                            proofPost.getContents().getImage()
+                                    )
+                            );
+                        })
+                        .toList();
+
+        return new GetProofPostsResponse(getProofPostResponses);
     }
 }
