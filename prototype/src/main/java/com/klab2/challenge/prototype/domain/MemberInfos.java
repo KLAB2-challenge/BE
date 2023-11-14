@@ -14,4 +14,5 @@ public class MemberInfos {
     private int totalCoins;
     private int holdingCoins;
     private int currentBorder;
+    private String imageUrl;
 }

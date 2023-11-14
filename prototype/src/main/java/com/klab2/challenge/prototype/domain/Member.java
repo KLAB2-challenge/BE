@@ -41,6 +41,6 @@ public class Member {
 
     public Member(String name) {
         this.name = name;
-        this.infos = new MemberInfos(0, 0, 0);
+        this.infos = new MemberInfos(0, 0, 0, "");
     }
 }
