@@ -20,6 +20,10 @@ public class Member {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Embedded
+    @Column(name = "infos")
+    private MemberInfos infos;
+
     @OneToMany(mappedBy = "member")
     private List<Challenge> challenges = new ArrayList<>();
 
@@ -32,7 +36,11 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<ProofPost> proofPosts = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member")
+    private List<MemberBorder> memberBorders = new ArrayList<>();
+
     public Member(String name) {
         this.name = name;
+        this.infos = new MemberInfos(0, 0, 0);
     }
 }
