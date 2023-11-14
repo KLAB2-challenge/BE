@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 public class MemberInfos {
     private int totalCoins;
     private int holdingCoins;
-    private int currentBorder;
+    private Long currentBorder;
     private String imageUrl;
 }

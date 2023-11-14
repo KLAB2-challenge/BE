@@ -148,7 +148,7 @@ public class ChallengeService {
         PageRequest pageRequest = PageRequest.of(page, size);
 
         List<GetChallengeResponse> getChallengeResponses =
-                challengeRepository.getMemberAllChallenges(member.getMemberId(), pageRequest)
+                memberChallengeRepository.getMemberAllChallenges(member.getMemberId(), pageRequest)
                         .stream()
                         .map( challenge -> {
                             return new GetChallengeResponse(
