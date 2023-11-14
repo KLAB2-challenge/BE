@@ -46,4 +46,10 @@ public class ChallengeController {
         GetRelatedChallengesResponse response = challengeService.getRelatedChallenges(request.getMemberName(), request.getPage(), request.getSize(), request.getCategory());
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/getMemberAllChallenges")
+    public ResponseEntity<GetMemberAllChallengesResponse> getChallenge(@RequestBody @Valid GetMemberAllChallengesRequest request) {
+        GetMemberAllChallengesResponse response = challengeService.getMemberAllChallenges(request.getMemberName(), request.getPage(), request.getSize());
+        return ResponseEntity.ok(response);
+    }
 }

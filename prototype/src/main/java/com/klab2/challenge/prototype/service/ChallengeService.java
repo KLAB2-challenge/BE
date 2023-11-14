@@ -138,4 +138,33 @@ public class ChallengeService {
 
         return new GetRelatedChallengesResponse(getChallengeResponses);
     }
+
+    @Transactional(readOnly = true)
+    public GetMemberAllChallengesResponse getMemberAllChallenges(String memberName, int page, int size) {
+
+        // 나중에 유저가 있는지 없는지 확인하는 용도로 memberName을 사용할 것. 지금은 그냥 씀.
+        Member member = memberRepository.findByName(memberName).get();
+
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        List<GetChallengeResponse> getChallengeResponses =
+                challengeRepository.getMemberAllChallenges(member.getMemberId(), pageRequest)
+                        .stream()
+                        .map( challenge -> {
+                            return new GetChallengeResponse(
+                                    challenge.getChallengeId(),
+                                    challenge.getContents(),
+                                    challenge.getInfos(),
+                                    Integer.parseInt(memberChallengeRepository
+                                            .findMemberNumOfChallenge(challenge.getChallengeId())
+                                            .toString()),
+                                    memberChallengeRepository
+                                            .findMemberChallengeByMemberAndChallenge(member, challenge)
+                                            .isPresent()
+                            );
+                        })
+                        .toList();
+
+        return new GetMemberAllChallengesResponse(getChallengeResponses);
+    }
 }

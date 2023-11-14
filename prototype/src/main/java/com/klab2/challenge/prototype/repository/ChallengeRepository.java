@@ -27,4 +27,11 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
             "WHERE c.infos.category = :category",
             countQuery = "SELECT COUNT(c) FROM Challenge c WHERE c.infos.category = :category")
     List<Challenge> getRelatedChallenges(@Param("category") int category, Pageable pageable);
+
+    @Query(value = "SELECT c FROM Challenge c " +
+            "WHERE c.challengeId IN (" +
+            "SELECT mc.challenge.challengeId FROM MemberChallenge mc " +
+            "WHERE mc.member.memberId = :memberId)",
+            countQuery = "SELECT COUNT(mc) FROM MemberChallenge mc WHERE MemberChallenge.member.memberId = :memberId")
+    List<Challenge> getMemberAllChallenges(@Param("memberId") Long memberId, Pageable pageable);
 }

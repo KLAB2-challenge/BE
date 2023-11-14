@@ -3,6 +3,7 @@ package com.klab2.challenge.prototype.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.klab2.challenge.prototype.dto.response.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,10 +17,6 @@ import com.klab2.challenge.prototype.domain.ChallengeContents;
 import com.klab2.challenge.prototype.domain.ChallengeInfos;
 import com.klab2.challenge.prototype.domain.Member;
 import com.klab2.challenge.prototype.domain.MemberChallenge;
-import com.klab2.challenge.prototype.dto.response.GetChallengeResponse;
-import com.klab2.challenge.prototype.dto.response.GetOfficialOrUserChallengesResponse;
-import com.klab2.challenge.prototype.dto.response.GetPopularChallengesResponse;
-import com.klab2.challenge.prototype.dto.response.GetRelatedChallengesResponse;
 import com.klab2.challenge.prototype.repository.ChallengeRepository;
 import com.klab2.challenge.prototype.repository.MemberChallengeRepository;
 import com.klab2.challenge.prototype.repository.MemberRepository;
@@ -213,5 +210,19 @@ class ChallengeServiceTest {
 
     private void joinChallenge(Member member, Challenge challenge) {
         memberChallengeRepository.save(new MemberChallenge(member, challenge));
+    }
+
+    @Test
+    @DisplayName("유저가 참여중인 챌린지를 가져온다.")
+    public void getMemberAllChallenges() {
+        // given
+        createChallenges(3, true, 1);
+
+        // when
+        GetMemberAllChallengesResponse response =
+                challengeService.getMemberAllChallenges(member.getName(), 0, 5);
+
+        // then
+        Assertions.assertThat(response.getChallenges().size()).isEqualTo(3);
     }
 }
