@@ -3,11 +3,18 @@ package com.klab2.challenge.prototype.service;
 import com.klab2.challenge.prototype.domain.Member;
 import com.klab2.challenge.prototype.dto.response.ChangeCurrentBorderResponse;
 import com.klab2.challenge.prototype.dto.response.GetMemberInfosResponse;
+import com.klab2.challenge.prototype.dto.response.GetRankResponse;
 import com.klab2.challenge.prototype.dto.response.SetMemberCoinsResponse;
 import com.klab2.challenge.prototype.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -41,4 +48,16 @@ public class MemberService {
 
         return new GetMemberInfosResponse(member.getName(), member.getInfos());
     }
+
+    @Transactional(readOnly = true)
+    public GetRankResponse getRank(String memberName){
+        Member member = memberRepository.findByName(memberName).get();
+        int my_rank = memberRepository.findMyRankByName(member.getInfos().getTotalCoins()).get()+1;
+        Sort sort = Sort.by("infos.holdingCoins").descending();
+        PageRequest pageRequest = PageRequest.of(0,20,sort);
+        Page<Member> memberEntities = memberRepository.findAll(pageRequest);
+        List<Member> ranker = memberEntities.stream().toList();
+        return new GetRankResponse(my_rank,ranker);
+    }
+
 }

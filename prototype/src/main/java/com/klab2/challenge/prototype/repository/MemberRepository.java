@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
@@ -29,4 +30,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             "WHERE m.memberId = :memberId")
     void changeCurrentBorder(@Param("memberId") Long memberId,
                              @Param("borderId") Long borderId);
+
+    @Query("SELECT count(*) FROM Member m where m.infos.holdingCoins > :totalCoins")
+    Optional<Integer> findMyRankByName(@Param("totalCoins") int totalCoins);
+
 }
