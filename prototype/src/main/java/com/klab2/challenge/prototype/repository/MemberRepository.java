@@ -31,7 +31,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     void changeCurrentBorder(@Param("memberId") Long memberId,
                              @Param("borderId") Long borderId);
 
-    @Query("SELECT count(*) FROM Member m where m.infos.holdingCoins > :totalCoins")
+    @Query("SELECT count(*) FROM Member m "+
+            "WHERE m.infos.holdingCoins > :totalCoins")
     Optional<Integer> findMyRankByName(@Param("totalCoins") int totalCoins);
 
 }
