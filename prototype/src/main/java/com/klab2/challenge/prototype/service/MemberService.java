@@ -52,12 +52,12 @@ public class MemberService {
     @Transactional(readOnly = true)
     public GetRankResponse getRank(String memberName){
         Member member = memberRepository.findByName(memberName).get();
-        int my_rank = memberRepository.findMyRankByName(member.getInfos().getTotalCoins()).get()+1;
+        int myRank = memberRepository.findMyRankByName(member.getInfos().getTotalCoins()).get()+1;
         Sort sort = Sort.by("infos.holdingCoins").descending();
         PageRequest pageRequest = PageRequest.of(0,20,sort);
         Page<Member> memberEntities = memberRepository.findAll(pageRequest);
         List<Member> ranker = memberEntities.stream().toList();
-        return new GetRankResponse(my_rank,ranker);
+        return new GetRankResponse(myRank,ranker);
     }
 
 }

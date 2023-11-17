@@ -43,5 +43,4 @@ public class MemberController {
         GetRankResponse response = memberService.getRank(memberName);
         return  ResponseEntity.ok(response);
     }
-
 }

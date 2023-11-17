@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberInfos {
     private int totalCoins;
-    @Column(name = "holdingCoins")
     private int holdingCoins;
     private Long currentBorder;
     private String imageUrl;
