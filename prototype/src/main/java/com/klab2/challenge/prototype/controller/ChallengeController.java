@@ -8,6 +8,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,8 +20,9 @@ public class ChallengeController {
     private final ChallengeService challengeService;
 
     @PostMapping("/setChallenge")
-    public ResponseEntity<SetChallengeResponse> setChallenge(@RequestBody @Valid SetChallengeRequest request) {
-        SetChallengeResponse response = challengeService.setChallenge(request.getMemberName(), request.getContents(), request.getInfos());
+    public ResponseEntity<SetChallengeResponse> setChallenge(@RequestPart(value = "image", required = false) MultipartFile image,
+                                                             @RequestPart(value = "challenge") @Valid SetChallengeRequest request) throws IOException {
+        SetChallengeResponse response = challengeService.setChallenge(request.getMemberName(), request.getContents(), request.getInfos(), image);
         return ResponseEntity.ok(response);
     }
 

@@ -5,12 +5,16 @@ import com.klab2.challenge.prototype.dto.response.*;
 import com.klab2.challenge.prototype.repository.ChallengeRepository;
 import com.klab2.challenge.prototype.repository.MemberChallengeRepository;
 import com.klab2.challenge.prototype.repository.MemberRepository;
+import com.klab2.challenge.prototype.s3.AwsS3FileSupporter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -19,13 +23,23 @@ public class ChallengeService {
     private final ChallengeRepository challengeRepository;
     private final MemberRepository memberRepository;
     private final MemberChallengeRepository memberChallengeRepository;
+    private final AwsS3FileSupporter awsS3FileSupporter;
 
     @Transactional
-    public SetChallengeResponse setChallenge(String memberName, ChallengeContents contents, ChallengeInfos infos) {
+    public SetChallengeResponse setChallenge(String memberName, ChallengeContents contents, ChallengeInfos infos, MultipartFile image) throws IOException {
 
         // 나중에 에러 처리해야함. (유저가 없는 경우)
         Member member = memberRepository.findByName(memberName).get();
-        Challenge challenge = new Challenge(member, contents, infos);
+
+        if (Objects.isNull(image)) {
+            contents.setImage("https://klab2-challenge-app.s3.ap-northeast-2.amazonaws.com/challengeImages/defaultChallengeImage.png");
+        }
+        else {
+            String imageUrl = awsS3FileSupporter.uploadImage(image, "challengeImages/");
+            contents.setImage(imageUrl);
+        }
+
+        Challenge challenge = new Challenge(member, contents, infos);;
 
         challengeRepository.save(challenge);
         memberChallengeRepository.save(new MemberChallenge(member, challenge));

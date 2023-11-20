@@ -1,7 +1,9 @@
 package com.klab2.challenge.prototype.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.klab2.challenge.prototype.dto.response.*;
 import org.assertj.core.api.Assertions;
@@ -20,6 +22,7 @@ import com.klab2.challenge.prototype.domain.MemberChallenge;
 import com.klab2.challenge.prototype.repository.ChallengeRepository;
 import com.klab2.challenge.prototype.repository.MemberChallengeRepository;
 import com.klab2.challenge.prototype.repository.MemberRepository;
+import org.springframework.web.multipart.MultipartFile;
 
 @SpringBootTest
 class ChallengeServiceTest {
@@ -49,14 +52,15 @@ class ChallengeServiceTest {
     }
 
     @Test
-    @DisplayName("챌린지를 정상적으로 생성한다.")
-    public void setChallengeService() {
+    @DisplayName("(기본 이미지로) 챌린지를 정상적으로 생성한다.")
+    public void setChallengeService() throws IOException {
         // given
         ChallengeContents contents = new ChallengeContents("title", "image", "content");
         ChallengeInfos infos = new ChallengeInfos("11/1", "12/1", "1주 1회", 1, true);
+        MultipartFile image = null;
 
         // when
-        Long challengeId = challengeService.setChallenge(member.getName(), contents, infos).getChallengeId();
+        Long challengeId = challengeService.setChallenge(member.getName(), contents, infos, image).getChallengeId();
 
         // then
         List<Challenge> found = challengeRepository.findAll();

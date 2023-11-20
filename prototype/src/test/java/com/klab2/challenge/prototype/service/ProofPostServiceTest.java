@@ -9,7 +9,9 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -62,15 +64,15 @@ public class ProofPostServiceTest {
 
     @Test
     @DisplayName("챌린지에 인증글 등록하기")
-    public void setProofPostTest() {
+    public void setProofPostTest() throws IOException {
         //given
         ProofPostContents contents1 = new ProofPostContents("pp-title1","pp-content1","pp-image1");
         ProofPostContents contents2 = new ProofPostContents("pp-title2","pp-content2","pp-image2");
-
+        MultipartFile image = null;
 
         //when
-        long proofPostId1 = proofPostService.setProofPost(challengeId, memberName, contents1).getProofPostid();
-        long proofPostId2 = proofPostService.setProofPost(challengeId, memberName, contents2).getProofPostid();
+        long proofPostId1 = proofPostService.setProofPost(challengeId, memberName, contents1, image).getProofPostid();
+        long proofPostId2 = proofPostService.setProofPost(challengeId, memberName, contents2, image).getProofPostid();
 
         //then
         List<ProofPost> found = proofPostRepository.findAll();

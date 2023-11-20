@@ -10,6 +10,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,8 +22,9 @@ public class ProofPostController {
     private final ProofPostService proofPostService;
 
     @PostMapping("/setProofPost")
-    public ResponseEntity<SetProofPostResponse> setProofPostRequestResponseEntity(@RequestBody @Valid SetProofPostRequest request){
-        SetProofPostResponse response = proofPostService.setProofPost(request.getChallengeId(), request.getMemberName(), request.getContents());
+    public ResponseEntity<SetProofPostResponse> setProofPostRequestResponseEntity(@RequestPart(value = "image", required = false) MultipartFile image,
+                                                                                  @RequestPart(value = "proofPost") @Valid SetProofPostRequest request) throws IOException {
+        SetProofPostResponse response = proofPostService.setProofPost(request.getChallengeId(), request.getMemberName(), request.getContents(), image);
         return ResponseEntity.ok(response);
     }
 

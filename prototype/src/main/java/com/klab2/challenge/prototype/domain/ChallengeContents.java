@@ -11,7 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChallengeContents {
+
     private String title;
     private String content;
     private String image;
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }

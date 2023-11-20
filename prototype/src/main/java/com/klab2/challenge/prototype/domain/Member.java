@@ -41,6 +41,12 @@ public class Member {
 
     public Member(String name) {
         this.name = name;
-        this.infos = new MemberInfos(0, 0, 1L, "");
+        this.infos = new MemberInfos(0, 0, 1L,
+                "https://klab2-challenge-app.s3.ap-northeast-2.amazonaws.com/userImages/defaultUserImage.png");
+    }
+
+    public Member(String name, String image) {
+        this.name = name;
+        this.infos = new MemberInfos(0, 0, 1L, image);
     }
 }

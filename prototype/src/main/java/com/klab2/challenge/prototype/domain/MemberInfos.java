@@ -15,5 +15,5 @@ public class MemberInfos {
     private int totalCoins;
     private int holdingCoins;
     private Long currentBorder;
-    private String imageUrl = "https://klab2-challenge-app.s3.ap-northeast-2.amazonaws.com/defaultImage.png";
+    private String imageUrl;
 }
