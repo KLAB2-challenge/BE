@@ -9,6 +9,7 @@ import com.klab2.challenge.prototype.repository.CommentRepository;
 import com.klab2.challenge.prototype.repository.MemberRepository;
 import com.klab2.challenge.prototype.repository.ProofPostRepository;
 import com.klab2.challenge.prototype.s3.AwsS3FileSupporter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -32,13 +33,16 @@ public class ProofPostService {
     private final CommentRepository commentRepository;
     private final AwsS3FileSupporter awsS3FileSupporter;
 
+    @Value("${s3.defaultProofPostImage}")
+    private String defaultImage;
+
     @Transactional
     public SetProofPostResponse setProofPost(Long challengeId, String memberName, ProofPostContents contents, MultipartFile image) throws IOException {
         Member member = memberRepository.findByName(memberName).get();
         Challenge challenge = challengeRepository.findById(challengeId).get();
 
         if(Objects.isNull(image)) {
-            contents.setImage("https://klab2-challenge-app.s3.ap-northeast-2.amazonaws.com/proofPostImages/defaultProofPostImage.png");
+            contents.setImage(defaultImage);
         }
         else {
             String imageUrl = awsS3FileSupporter.uploadImage(image, "proofPostImages/");

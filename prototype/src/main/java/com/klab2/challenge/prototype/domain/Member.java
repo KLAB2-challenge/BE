@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +40,13 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<MemberBorder> memberBorders = new ArrayList<>();
 
+    @Value("${s3.defaultUserImage}")
+    @Transient
+    private String defaultImage;
+
     public Member(String name) {
         this.name = name;
-        this.infos = new MemberInfos(0, 0, 1L,
-                "https://klab2-challenge-app.s3.ap-northeast-2.amazonaws.com/userImages/defaultUserImage.png");
+        this.infos = new MemberInfos(0, 0, 1L, defaultImage);
     }
 
     public Member(String name, String image) {

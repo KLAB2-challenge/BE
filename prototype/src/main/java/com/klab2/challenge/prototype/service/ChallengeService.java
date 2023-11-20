@@ -7,6 +7,7 @@ import com.klab2.challenge.prototype.repository.MemberChallengeRepository;
 import com.klab2.challenge.prototype.repository.MemberRepository;
 import com.klab2.challenge.prototype.s3.AwsS3FileSupporter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,9 @@ public class ChallengeService {
     private final MemberChallengeRepository memberChallengeRepository;
     private final AwsS3FileSupporter awsS3FileSupporter;
 
+    @Value("${s3.defaultChallengeImage}")
+    private String defaultImage;
+
     @Transactional
     public SetChallengeResponse setChallenge(String memberName, ChallengeContents contents, ChallengeInfos infos, MultipartFile image) throws IOException {
 
@@ -32,7 +36,7 @@ public class ChallengeService {
         Member member = memberRepository.findByName(memberName).get();
 
         if (Objects.isNull(image)) {
-            contents.setImage("https://klab2-challenge-app.s3.ap-northeast-2.amazonaws.com/challengeImages/defaultChallengeImage.png");
+            contents.setImage(defaultImage);
         }
         else {
             String imageUrl = awsS3FileSupporter.uploadImage(image, "challengeImages/");
