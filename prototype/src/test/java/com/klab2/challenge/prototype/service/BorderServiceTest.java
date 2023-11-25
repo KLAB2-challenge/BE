@@ -53,9 +53,9 @@ public class BorderServiceTest {
         memberBorderRepository.save(memberBorder2);
 
         // when
-        List<Border> borders = borderService.getMemberAllBorders(member.getName()).getBorders();
+        List<Long> borderIds = borderService.getMemberAllBorders(member.getName()).getBorderIds();
 
         // then
-        Assertions.assertThat(borders).hasSize(2);
+        Assertions.assertThat(borderIds).hasSize(2);
     }
 }
