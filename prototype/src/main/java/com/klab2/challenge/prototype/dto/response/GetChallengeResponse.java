@@ -13,4 +13,5 @@ public class GetChallengeResponse {
     private ChallengeInfos infos;
     private int memberNum;
     private boolean isJoin;
+    private double progressRate;
 }

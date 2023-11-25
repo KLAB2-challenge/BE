@@ -14,8 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -67,7 +71,23 @@ public class ChallengeService {
         // 유저가 챌린지에 참가 중인지 확인
         boolean isJoin = memberChallengeRepository.findMemberChallengeByMemberAndChallenge(member, challenge).isPresent();
 
-        return new GetChallengeResponse(challenge.getChallengeId(), challenge.getContents(), challenge.getInfos(), memberNum, isJoin);
+        // 진행도
+        double progressRate = getProgressRate(challenge);
+
+        return new GetChallengeResponse(challenge.getChallengeId(), challenge.getContents(), challenge.getInfos(), memberNum, isJoin, progressRate);
+    }
+    public double getProgressRate(Challenge challenge){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate startDate = LocalDate.parse(challenge.getInfos().getStartDate(), formatter);
+        LocalDate endDate = LocalDate.parse(challenge.getInfos().getEndDate(), formatter);
+        LocalDate currentDate = LocalDate.now();
+        double progressRate = 1.0;
+        if (endDate.isBefore(currentDate)){
+            long period = ChronoUnit.DAYS.between(startDate, endDate);
+            long elapsed = ChronoUnit.DAYS.between(startDate, currentDate);
+            progressRate = (double) (elapsed/period);
+        }
+        return progressRate;
     }
 
     @Transactional(readOnly = true)
@@ -91,7 +111,8 @@ public class ChallengeService {
                                             .toString()),
                                     memberChallengeRepository
                                             .findMemberChallengeByMemberAndChallenge(member, challenge)
-                                            .isPresent()
+                                            .isPresent(),
+                                    getProgressRate(challenge)
                             );
                         })
                         .toList();
@@ -120,7 +141,8 @@ public class ChallengeService {
                                             .toString()),
                                     memberChallengeRepository
                                             .findMemberChallengeByMemberAndChallenge(member, challenge)
-                                            .isPresent()
+                                            .isPresent(),
+                                    getProgressRate(challenge)
                             );
                         })
                         .toList();
@@ -149,7 +171,8 @@ public class ChallengeService {
                                             .toString()),
                                     memberChallengeRepository
                                             .findMemberChallengeByMemberAndChallenge(member, challenge)
-                                            .isPresent()
+                                            .isPresent(),
+                                    getProgressRate(challenge)
                             );
                         })
                         .toList();
@@ -178,7 +201,8 @@ public class ChallengeService {
                                             .toString()),
                                     memberChallengeRepository
                                             .findMemberChallengeByMemberAndChallenge(member, challenge)
-                                            .isPresent()
+                                            .isPresent(),
+                                    getProgressRate(challenge)
                             );
                         })
                         .toList();
