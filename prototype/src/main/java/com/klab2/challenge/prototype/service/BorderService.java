@@ -21,8 +21,8 @@ public class BorderService {
     @Transactional(readOnly = true)
     public GetMemberAllBordersResponse getMemberAllBorders(String memberName) {
         Member member = memberRepository.findByName(memberName).get();
-        List<Border> borders = memberBorderRepository.getMemberAllBorders(member.getMemberId());
+        List<Long> borderIds = memberBorderRepository.getMemberAllBorders(member.getMemberId());
 
-        return new GetMemberAllBordersResponse(borders);
+        return new GetMemberAllBordersResponse(borderIds);
     }
 }

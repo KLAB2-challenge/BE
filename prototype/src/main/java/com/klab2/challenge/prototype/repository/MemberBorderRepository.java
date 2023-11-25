@@ -12,9 +12,9 @@ import java.util.Optional;
 
 public interface MemberBorderRepository extends JpaRepository<MemberBorder, Long> {
 
-    @Query("SELECT mb.border FROM MemberBorder mb " +
+    @Query("SELECT mb.border.id FROM MemberBorder mb " +
             "WHERE mb.member.memberId = :memberId")
-    List<Border> getMemberAllBorders(@Param("memberId") Long memberId);
+    List<Long> getMemberAllBorders(@Param("memberId") Long memberId);
 
     Optional<MemberBorder> findMemberBorderByMemberAndBorder(Member member, Border border);
 }
