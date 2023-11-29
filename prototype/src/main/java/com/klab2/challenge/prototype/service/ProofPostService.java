@@ -68,6 +68,8 @@ public class ProofPostService {
         return new GetProofPostResponse(
                 proofPost.getProofPostId(),
                 proofPost.getMember().getName(),
+                proofPost.getMember().getInfos().getCurrentBorder(),
+                proofPost.getMember().getInfos().getImageUrl(),
                 proofPost.getContents(),
                 proofPost.getInfos(),
                 commentNum);
@@ -88,6 +90,8 @@ public class ProofPostService {
                             return new GetProofPostResponse(
                                     proofPost.getProofPostId(),
                                     proofPost.getMember().getName(),
+                                    proofPost.getMember().getInfos().getCurrentBorder(),
+                                    proofPost.getMember().getInfos().getImageUrl(),
                                     new ProofPostContents(
                                             proofPost.getContents().getTitle(),
                                             proofPost.getContents().getContent(),
@@ -114,6 +118,8 @@ public class ProofPostService {
                             return new GetProofPostResponse(
                                     proofPost.getProofPostId(),
                                     proofPost.getMember().getName(),
+                                    proofPost.getMember().getInfos().getCurrentBorder(),
+                                    proofPost.getMember().getInfos().getImageUrl(),
                                     new ProofPostContents(
                                             proofPost.getContents().getTitle(),
                                             proofPost.getContents().getContent(),

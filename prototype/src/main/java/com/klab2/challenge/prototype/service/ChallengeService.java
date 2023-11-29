@@ -76,19 +76,6 @@ public class ChallengeService {
 
         return new GetChallengeResponse(challenge.getChallengeId(), challenge.getContents(), challenge.getInfos(), memberNum, isJoin, progressRate);
     }
-    public double getProgressRate(Challenge challenge){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate startDate = LocalDate.parse(challenge.getInfos().getStartDate(), formatter);
-        LocalDate endDate = LocalDate.parse(challenge.getInfos().getEndDate(), formatter);
-        LocalDate currentDate = LocalDate.now();
-        double progressRate = 1.0;
-        if (endDate.isBefore(currentDate)){
-            long period = ChronoUnit.DAYS.between(startDate, endDate);
-            long elapsed = ChronoUnit.DAYS.between(startDate, currentDate);
-            progressRate = (double) (elapsed/period);
-        }
-        return progressRate;
-    }
 
     @Transactional(readOnly = true)
     public GetPopularChallengesResponse getPopularChallenges(String memberName, int page, int size) {
@@ -208,5 +195,19 @@ public class ChallengeService {
                         .toList();
 
         return new GetMemberAllChallengesResponse(getChallengeResponses);
+    }
+
+    public double getProgressRate(Challenge challenge){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+        LocalDate startDate = LocalDate.parse(challenge.getInfos().getStartDate(), formatter);
+        LocalDate endDate = LocalDate.parse(challenge.getInfos().getEndDate(), formatter);
+        LocalDate currentDate = LocalDate.now();
+        double progressRate = 1.0;
+        if (endDate.isAfter(currentDate)){
+            double period = ChronoUnit.DAYS.between(startDate, endDate);
+            double elapsed = ChronoUnit.DAYS.between(startDate, currentDate);
+            progressRate = (double) (elapsed/period);
+        }
+        return progressRate;
     }
 }

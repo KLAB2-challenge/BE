@@ -1,5 +1,6 @@
 package com.klab2.challenge.prototype.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -25,18 +26,23 @@ public class Member {
     @Column(name = "infos")
     private MemberInfos infos;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "member")
     private List<Challenge> challenges = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "member")
     private List<MemberChallenge> memberChallenges = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "member")
     private List<Comment> comments = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "member")
     private List<ProofPost> proofPosts = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "member")
     private List<MemberBorder> memberBorders = new ArrayList<>();
 

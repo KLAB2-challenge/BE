@@ -46,6 +46,8 @@ public class CommentService {
                 .map(comment -> {
                     return new GetCommentResponse(
                             comment.getMember().getName(),
+                            comment.getMember().getInfos().getCurrentBorder(),
+                            comment.getMember().getInfos().getImageUrl(),
                             comment.getContent(),
                             comment.getInfos()
                     );
