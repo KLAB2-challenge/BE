@@ -15,4 +15,7 @@ public class BuyBorderRequest {
 
     @NotNull(message = "borderId를 전달해주세요.")
     private Long borderId;
+
+    @NotNull(message = "cost를 전달해주세요")
+    private int cost;
 }

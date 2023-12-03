@@ -47,8 +47,8 @@ public class MemberBorderServiceTest {
         borderRepository.save(border2);
 
         // when
-        memberBorderService.buyBorder(member.getName(), border1.getId());
-        memberBorderService.buyBorder(member.getName(), border2.getId());
+        memberBorderService.buyBorder(member.getName(), border1.getId(), 10);
+        memberBorderService.buyBorder(member.getName(), border2.getId(), 10);
         List<MemberBorder> memberBorders = memberBorderRepository.findAll();
 
         // then

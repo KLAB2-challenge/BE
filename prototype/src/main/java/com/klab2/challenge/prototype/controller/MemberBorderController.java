@@ -20,7 +20,7 @@ public class MemberBorderController {
     @PostMapping("/buyBorder")
     public ResponseEntity<BuyBorderResponse> buyBorder(@RequestBody @Valid BuyBorderRequest request){
         log.info("user: {}, request: /memberBorder/buyBorder", request.getMemberName());
-        BuyBorderResponse response = memberBorderService.buyBorder(request.getMemberName(), request.getBorderId());
+        BuyBorderResponse response = memberBorderService.buyBorder(request.getMemberName(), request.getBorderId(), request.getCost());
         return ResponseEntity.ok(response);
     }
 }

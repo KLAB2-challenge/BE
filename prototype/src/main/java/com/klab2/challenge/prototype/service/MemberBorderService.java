@@ -20,9 +20,12 @@ public class MemberBorderService {
     private final MemberBorderRepository memberBorderRepository;
 
     @Transactional
-    public BuyBorderResponse buyBorder(String memberName, Long borderId) {
+    public BuyBorderResponse buyBorder(String memberName, Long borderId, int cost) {
         Member member = memberRepository.findByName(memberName).get();
         Border border = borderRepository.findById(borderId).get();
+
+        int holdingCoins = memberRepository.findByName(memberName).get().getInfos().getHoldingCoins()-cost;
+        memberRepository.buyBorder(member.getMemberId(), holdingCoins);
 
         if(memberBorderRepository.findMemberBorderByMemberAndBorder(member, border).isEmpty())
             memberBorderRepository.save(new MemberBorder(member, border));
