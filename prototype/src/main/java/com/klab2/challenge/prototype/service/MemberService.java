@@ -53,7 +53,7 @@ public class MemberService {
     public GetRankResponse getRank(String memberName){
         Member member = memberRepository.findByName(memberName).get();
         int myRank = memberRepository.findMyRankByName(member.getInfos().getTotalCoins()).get()+1;
-        Sort sort = Sort.by("infos.holdingCoins").descending();
+        Sort sort = Sort.by("infos.totalCoins").descending();
         PageRequest pageRequest = PageRequest.of(0,20,sort);
         Page<Member> memberEntities = memberRepository.findAll(pageRequest);
         List<Member> ranker = memberEntities.stream().toList();
